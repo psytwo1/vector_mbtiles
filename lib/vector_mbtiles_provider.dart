@@ -1,0 +1,39 @@
+library vector_mbtiles;
+
+import 'dart:typed_data';
+import 'provider_exception.dart';
+import 'mbtiles_utility.dart';
+import 'package:vector_map_tiles/vector_map_tiles.dart';
+
+class VectorMBTilesProvider extends VectorTileProvider {
+  final String _mbtilesURL;
+  final int _maximumZoom;
+  late MBTilesUtility _mbTiles;
+
+  @override
+  int get maximumZoom => _maximumZoom;
+
+  /// [mbtilesPath] the URL template, e.g. `'assets/data/map.mbtiles'`
+  /// [maximumZoom] the maximum zoom supported by the tile provider, not to be
+  ///  confused with the maximum zoom of the map widget. The map widget will
+  ///  automatically use vector tiles from lower zoom levels once the maximum
+  ///  supported by this provider is reached.
+  VectorMBTilesProvider({required String mbtilesPath, int maximumZoom = 16})
+      : _mbtilesURL = mbtilesPath,
+        _maximumZoom = maximumZoom {
+    _mbTiles = MBTilesUtility(_mbtilesURL);
+  }
+
+  @override
+  Future<Uint8List> provide(TileIdentity tile) async {
+    _checkTile(tile);
+    return await _mbTiles.getVectorTileBytes(tile);
+  }
+
+  void _checkTile(TileIdentity tile) {
+    if (tile.z < 0 || tile.z > _maximumZoom || tile.x < 0 || tile.y < 0) {
+      throw ProviderException(
+          message: 'out of range', retryable: Retryable.none);
+    }
+  }
+}
