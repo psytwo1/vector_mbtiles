@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
               options: MapOptions(
                 center: LatLng(35.68132332775388, 139.76712479771956),
                 zoom: 13,
-                maxZoom: 14,
+                maxZoom: 18,
                 plugins: [VectorMapTilesPlugin()],
               ),
               children: [
@@ -115,7 +115,7 @@ VectorTileProvider _cachingTileProvider(String mbtilesPath) {
           // this is the maximum zoom of the provider, not the
           // maximum of the map. vector tiles are rendered
           // to larger sizes to support higher zoom levels
-          maximumZoom: 14),
+          maximumZoom: 18),
       maxSizeBytes: 1024 * 1024 * 2);
 }
 

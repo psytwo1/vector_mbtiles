@@ -10,8 +10,9 @@ import 'provider_exception.dart';
 class MBTilesUtility {
   final String _mbtilesPath;
   Database? _database;
+  late Future<Database> getDBFuture;
   MBTilesUtility(this._mbtilesPath) {
-    _getDatabase(_mbtilesPath).then((value) => _database);
+    getDBFuture = _getDatabase(_mbtilesPath).then((value) => value);
   }
 
   Future<Uint8List> getVectorTileBytes(TileIdentity tile) async {
@@ -22,7 +23,8 @@ class MBTilesUtility {
           retryable: Retryable.none,
           statusCode: 400);
     }
-    _database ??= await _getDatabase(_mbtilesPath);
+
+    _database ??= await getDBFuture;
 
     final resultSet =
         await _database!.query('tiles', columns: ['tile_data'], where: '''
@@ -48,7 +50,6 @@ class MBTilesUtility {
     final dbFilename = url.split('/').last;
     var path = join(databasesPath, dbFilename);
     var exists = await databaseExists(path);
-
     if (!exists) {
       var data = await rootBundle.load(url);
       List<int> bytes = data.buffer.asUint8List(
