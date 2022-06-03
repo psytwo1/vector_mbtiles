@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'VectorMBTiles Demo',
+      title: 'VectorMBTiles example',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'VectorMBTiles Demo'),
+      home: const MyHomePage(title: 'VectorMBTiles example'),
     );
   }
 }
