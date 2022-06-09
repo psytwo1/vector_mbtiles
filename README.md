@@ -11,29 +11,34 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+# VectorMBTiles
+
+VectorMB Tiles is a Flutter plugin for working with Mapbox Vector Tiles in FlutterMap. 
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+By extending VectorTileProvider and specifying VectorMBTiles as the argument of MemoryCacheVectorTileProvider to delegate, it can operate at high speed in memory.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Add the package with the following command
+```bash
+flutter pub add vector_mbtiles
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+refer to the following. See `/example` folder for details
 
 ```dart
-const like = 'sample';
+VectorTileLayerWidget(
+    options: VectorTileLayerOptions(
+        theme: Theme,
+        tileProviders: TileProviders({
+            'openmaptiles': VectorMBTilesProvider(
+                mbtilesPath: '/path/to/mbtiles',
+                maximumZoom: 18)
+        })
+    ),
+)
 ```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.

@@ -56,19 +56,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   final MapController _mapController = MapController();
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mapController: _mapController,
               options: MapOptions(
                 center: LatLng(35.68132332775388, 139.76712479771956),
-                zoom: 13,
+                zoom: 15,
                 maxZoom: 18,
                 plugins: [VectorMapTilesPlugin()],
               ),
@@ -123,14 +111,14 @@ _mapTheme(BuildContext context) {
   // maps are rendered using themes
   // to provide a dark theme do something like this:
   // if (MediaQuery.of(context).platformBrightness == Brightness.dark) return myDarkTheme();
-  return TsunamiShinsuiTheme.osmBrightJaTheme();
+  return OSMBrightTheme.osmBrightJaTheme();
 }
 
-extension TsunamiShinsuiTheme on ProvidedThemes {
+extension OSMBrightTheme on ProvidedThemes {
   static vector_tile_renderer.Theme osmBrightJaTheme({Logger? logger}) =>
       ThemeReader(logger: logger).read(osmBrightJaStyle());
 }
 
 String _basemapPath() {
-  return 'assets/tokyo.mbtiles';
+  return 'assets/example.mbtiles';
 }

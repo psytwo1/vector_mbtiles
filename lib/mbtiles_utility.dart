@@ -1,18 +1,19 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/services.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
 import 'provider_exception.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class MBTilesUtility {
   final String _mbtilesPath;
   Database? _database;
   late Future<Database> getDBFuture;
   MBTilesUtility(this._mbtilesPath) {
-    getDBFuture = _getDatabase(_mbtilesPath).then((value) => value);
+    getDBFuture = _getDatabase(_mbtilesPath);
   }
 
   Future<Uint8List> getVectorTileBytes(TileIdentity tile) async {
@@ -46,10 +47,18 @@ class MBTilesUtility {
   }
 
   Future<Database> _getDatabase(String url) async {
-    var databasesPath = await getDatabasesPath();
+    String databasesPath;
+    String dbFullPath;
     final dbFilename = url.split('/').last;
-    var path = join(databasesPath, dbFilename);
-    var exists = await databaseExists(path);
+    if (Platform.isIOS || Platform.isAndroid) {
+      databasesPath = await getDatabasesPath();
+      dbFullPath = path.join(databasesPath, dbFilename);
+    } else {
+      databasesPath = '';
+      dbFullPath = url;
+    }
+
+    var exists = await databaseExists(dbFullPath);
     if (!exists) {
       var data = await rootBundle.load(url);
       List<int> bytes = data.buffer.asUint8List(
@@ -57,9 +66,12 @@ class MBTilesUtility {
         data.lengthInBytes,
       );
 
-      await File(path).writeAsBytes(bytes, flush: true);
+      await File(dbFullPath).writeAsBytes(bytes, flush: true);
     }
-
-    return await openDatabase(path);
+    if (Platform.isIOS || Platform.isAndroid) {
+      return await openDatabase(dbFullPath);
+    } else {
+      return await databaseFactoryFfi.openDatabase(dbFullPath);
+    }
   }
 }
