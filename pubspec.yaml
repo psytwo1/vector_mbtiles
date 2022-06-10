@@ -10,17 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  path: ^1.8.1
   sqflite: ^2.0.2+1
-  sqflite_common_ffi: ^2.1.1
-  vector_map_tiles: ^2.0.1
+  vector_map_tiles: ^2.1.0
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: ^2.0.0
-  vector_tile_renderer: ^2.4.6
-  latlong2: ^0.8.1
-  flutter_map: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -1,9 +1,11 @@
 library vector_mbtiles;
 
 import 'dart:typed_data';
-import 'provider_exception.dart';
-import 'mbtiles_utility.dart';
+
 import 'package:vector_map_tiles/vector_map_tiles.dart';
+
+import 'mbtiles_utility.dart';
+import 'provider_exception.dart';
 
 class VectorMBTilesProvider extends VectorTileProvider {
   final String _mbtilesURL;

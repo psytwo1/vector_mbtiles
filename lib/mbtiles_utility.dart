@@ -1,12 +1,13 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
-import 'package:flutter/services.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
+
 import 'provider_exception.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class MBTilesUtility {
   final String _mbtilesPath;
@@ -50,13 +51,9 @@ class MBTilesUtility {
     String databasesPath;
     String dbFullPath;
     final dbFilename = url.split('/').last;
-    if (Platform.isIOS || Platform.isAndroid) {
-      databasesPath = await getDatabasesPath();
-      dbFullPath = path.join(databasesPath, dbFilename);
-    } else {
-      databasesPath = '';
-      dbFullPath = url;
-    }
+
+    databasesPath = await getDatabasesPath();
+    dbFullPath = path.join(databasesPath, dbFilename);
 
     var exists = await databaseExists(dbFullPath);
     if (!exists) {
@@ -68,10 +65,6 @@ class MBTilesUtility {
 
       await File(dbFullPath).writeAsBytes(bytes, flush: true);
     }
-    if (Platform.isIOS || Platform.isAndroid) {
-      return await openDatabase(dbFullPath);
-    } else {
-      return await databaseFactoryFfi.openDatabase(dbFullPath);
-    }
+    return await openDatabase(dbFullPath);
   }
 }

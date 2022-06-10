@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
+import 'package:vector_mbtiles/vector_mbtiles_provider.dart';
 import 'package:vector_tile_renderer/vector_tile_renderer.dart';
 import 'package:vector_tile_renderer/vector_tile_renderer.dart'
     as vector_tile_renderer;
+
 import 'osm_bright_ja_style.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:vector_mbtiles/vector_mbtiles_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -85,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               children: [
                 VectorTileLayerWidget(
+                  key: const Key('VectorTileLayerWidget'),
                   options: VectorTileLayerOptions(
                       theme: _mapTheme(context),
                       tileProviders: TileProviders({
