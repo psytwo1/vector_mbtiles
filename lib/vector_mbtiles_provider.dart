@@ -1,3 +1,4 @@
+/// Library of MB Tiles in vector format.
 library vector_mbtiles;
 
 import 'dart:typed_data';
@@ -7,6 +8,7 @@ import 'package:vector_map_tiles/vector_map_tiles.dart';
 import 'mbtiles_utility.dart';
 import 'provider_exception.dart';
 
+/// Vector MBTiles Provider.
 class VectorMBTilesProvider extends VectorTileProvider {
   final String _mbtilesURL;
   final int _maximumZoom;

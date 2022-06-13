@@ -9,14 +9,20 @@ import 'package:vector_map_tiles/vector_map_tiles.dart';
 
 import 'provider_exception.dart';
 
+/// MBTilesUtility is MBTiles access utility.
 class MBTilesUtility {
   final String _mbtilesPath;
   Database? _database;
   late Future<Database> getDBFuture;
+
+  /// A constructor of `MBTilesUtility` class.
+  /// [_mbtilesPath] MBTiles path
   MBTilesUtility(this._mbtilesPath) {
     getDBFuture = _getDatabase(_mbtilesPath);
   }
 
+  /// Get VectorTileBytes in binary
+  /// [tile] TileIdentity(z, x, y)
   Future<Uint8List> getVectorTileBytes(TileIdentity tile) async {
     final max = pow(2, tile.z).toInt();
     if (tile.x >= max || tile.y >= max || tile.x < 0 || tile.y < 0) {
