@@ -1,7 +1,7 @@
 name: vector_mbtiles
-description: A new Flutter package project.
+description: VectorMB Tiles is a Flutter plugin for working with Mapbox Vector Tiles in FlutterMap. 
 version: 0.0.1
-homepage:
+repository: https://github.com/psytwo1/vector_mbtiles.git
 
 environment:
   sdk: ">=2.17.1 <3.0.0"
