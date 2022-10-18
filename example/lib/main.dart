@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
-import 'package:vector_mbtiles/vector_mbtiles_provider.dart';
+import 'package:vector_mbtiles/vector_mbtiles.dart';
 import 'package:vector_tile_renderer/vector_tile_renderer.dart';
 import 'package:vector_tile_renderer/vector_tile_renderer.dart'
     as vector_tile_renderer;
@@ -82,16 +82,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 center: LatLng(35.68132332775388, 139.76712479771956),
                 zoom: 15,
                 maxZoom: 18,
-                plugins: [VectorMapTilesPlugin()],
+                // plugins: [VectorMapTilesPlugin()],
               ),
               children: [
-                VectorTileLayerWidget(
+                VectorTileLayer(
                   key: const Key('VectorTileLayerWidget'),
-                  options: VectorTileLayerOptions(
-                      theme: _mapTheme(context),
-                      tileProviders: TileProviders({
-                        'openmaptiles': _cachingTileProvider(_basemapPath())
-                      })),
+                  theme: _mapTheme(context),
+                  tileProviders: TileProviders(
+                      {'openmaptiles': _cachingTileProvider(_basemapPath())}),
                 ),
               ]),
         ));
@@ -105,7 +103,7 @@ VectorTileProvider _cachingTileProvider(String mbtilesPath) {
           // this is the maximum zoom of the provider, not the
           // maximum of the map. vector tiles are rendered
           // to larger sizes to support higher zoom levels
-          maximumZoom: 18),
+          maximumZoom: 14),
       maxSizeBytes: 1024 * 1024 * 2);
 }
 

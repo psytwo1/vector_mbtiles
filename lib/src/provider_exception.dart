@@ -5,12 +5,14 @@ enum Retryable { retry, none }
 
 /// Provider exception.
 class ProviderException implements Exception {
+  ProviderException({
+    required this.message,
+    this.statusCode,
+    required this.retryable,
+  });
   final Retryable retryable;
   final String message;
   final int? statusCode;
-
-  ProviderException(
-      {required this.message, this.statusCode, required this.retryable});
 
   @override
   String toString() => message;

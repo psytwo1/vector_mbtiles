@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
@@ -11,15 +10,14 @@ import 'provider_exception.dart';
 
 /// MBTilesUtility is MBTiles access utility.
 class MBTilesUtility {
-  final String _mbtilesPath;
-  Database? _database;
-  late Future<Database> getDBFuture;
-
   /// A constructor of `MBTilesUtility` class.
   /// [_mbtilesPath] MBTiles path
   MBTilesUtility(this._mbtilesPath) {
     getDBFuture = _getDatabase(_mbtilesPath);
   }
+  final String _mbtilesPath;
+  Database? _database;
+  late Future<Database> getDBFuture;
 
   /// Get VectorTileBytes in binary
   /// [tile] TileIdentity(z, x, y)
@@ -27,27 +25,34 @@ class MBTilesUtility {
     final max = pow(2, tile.z).toInt();
     if (tile.x >= max || tile.y >= max || tile.x < 0 || tile.y < 0) {
       throw ProviderException(
-          message: 'Invalid tile coordinates $tile',
-          retryable: Retryable.none,
-          statusCode: 400);
+        message: 'Invalid tile coordinates $tile',
+        retryable: Retryable.none,
+        statusCode: 400,
+      );
     }
 
     _database ??= await getDBFuture;
 
-    final resultSet =
-        await _database!.query('tiles', columns: ['tile_data'], where: '''
+    final resultSet = await _database!.query(
+      'tiles',
+      columns: ['tile_data'],
+      where: '''
       zoom_level = ?
       AND tile_column = ?
       AND tile_row = ?
-      ''', whereArgs: [tile.z, tile.x, max - tile.y - 1]);
+      ''',
+      whereArgs: [tile.z, tile.x, max - tile.y - 1],
+    );
 
     if (resultSet.length == 1) {
       final tileData = resultSet.first['tile_data'];
-      final ungzipTile = GZipCodec().decode(tileData as Uint8List);
+      final ungzipTile = GZipCodec().decode(tileData! as Uint8List);
       return ungzipTile as Uint8List;
     } else if (resultSet.length > 1) {
       throw ProviderException(
-          message: 'Too many match tiles', retryable: Retryable.none);
+        message: 'Too many match tiles',
+        retryable: Retryable.none,
+      );
     } else {
       return Uint8List(0);
     }
@@ -61,16 +66,16 @@ class MBTilesUtility {
     databasesPath = await getDatabasesPath();
     dbFullPath = path.join(databasesPath, dbFilename);
 
-    var exists = await databaseExists(dbFullPath);
+    final exists = await databaseExists(dbFullPath);
     if (!exists) {
-      var data = await rootBundle.load(url);
-      List<int> bytes = data.buffer.asUint8List(
+      final data = await rootBundle.load(url);
+      final List<int> bytes = data.buffer.asUint8List(
         data.offsetInBytes,
         data.lengthInBytes,
       );
 
       await File(dbFullPath).writeAsBytes(bytes, flush: true);
     }
-    return await openDatabase(dbFullPath);
+    return openDatabase(dbFullPath);
   }
 }

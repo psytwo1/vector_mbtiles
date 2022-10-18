@@ -1,3 +1,7 @@
+## 0.0.5
+
+Support for vector_map_tiles 3.1.4
+
 ## 0.0.4
 
 Modify example
